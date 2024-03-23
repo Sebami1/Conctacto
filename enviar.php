@@ -36,6 +36,7 @@ if (!empty($nombreArchivo) && !empty($archivoTemporal)) {
         // Cabeceras del correo
         $headers = "From: $nombre <$email>\r\n";
         $headers .= "Reply-To: $email\r\n";
+        $headers .= "X-Mailer: PHP/" . phpversion();
         $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
         $headers .= "Content-Transfer-Encoding: 8bit\r\n";
 
