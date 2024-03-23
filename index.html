@@ -18,21 +18,20 @@
             <div class="templatemo_sub_contacttitle">COMPLETE EL SIGUIENTE FORMULARIO</div>
             <p> Fomrulario de registro:</p>
 
-            <form id="miFormulario" action="enviar.php" method="post">
+            <form id="miFormulario" action="enviar.php" method="post" enctype="multipart/form-data">
                 <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
                 <input type="email" id="email" name="email" placeholder="Email" required>
                 <textarea id="mensaje" name="mensaje" rows="2" required></textarea> <!-- Corregir "texttarea" a "textarea" -->
+                <input type="file" id="archivo" name="archivo" accept=".pdf,.doc,.docx,.jpg,.png">
                 <input type="email" id="correo_remitente" name="correo_remitente" placeholder="Enviar copia a mi correo:">
                 <div class="clear"></div>
                 <div class="col-md-8">
-                    <!-- Agregar un ID al botón de enviar -->
                     <button id="btnEnviar" type="button" class="btn btn-primary">ENVIAR</button>
                 </div>
             </form>
         </div>
         <script>
         $(document).ready(function() {
-            // Función para mostrar SweetAlert antes de enviar el formulario
             $("#btnEnviar").click(function() {
                 Swal.fire({
                     title: '¿Estás seguro?',
@@ -43,20 +42,19 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Si el usuario confirma, enviar el formulario usando AJAX
+                        var formData = new FormData($("#miFormulario")[0]);
                         $.ajax({
                             type: "POST",
                             url: "enviar.php",
-                            data: $("#miFormulario").serialize(), // Serializar el formulario para enviar los datos
+                            data: formData,
+                            processData: false,
+                            contentType: false,
                             success: function(response) {
-                                // Aquí puedes manejar la respuesta del servidor si es necesario
                                 console.log(response);
-                                // Recargar la página después de enviar el formulario
                                 window.location.reload();
                             },
                             error: function(xhr, status, error) {
                                 console.error(xhr.responseText);
-                                // Mostrar mensaje de error si hay un problema con AJAX
                                 alert("Hubo un error al procesar la solicitud.");
                             }
                         });
@@ -64,9 +62,9 @@
                 });
             });
         });
-            </script>
-        
+        </script>
     </div>
-    
 </body>
 </html>
+
+
