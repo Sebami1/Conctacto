@@ -1,7 +1,7 @@
 <?php
 
 // Configuración del servidor SMTP
-ini_set("SMTP", "wolfstore.shop");
+ini_set("SMTP", "mail.wolfstore.shop");
 ini_set("smtp_port", "5847");
 
 // Datos del formulario
