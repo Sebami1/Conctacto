@@ -57,3 +57,18 @@ body {
 .templatemo_contactform .btn-primary:hover {
     background: #a6d82c;
 }
+
+/* Estilos para el campo de carga de archivos */
+.templatemo_contactform input[type="file"] {
+    width: 100%;
+    background: #282828;
+    border: 1px solid #393939;
+    padding: 7px 10px;
+    margin: 0px 0px 10px 0px;
+    background-color: #FAFAFA;
+    color: #888888;
+}
+
+.templatemo_contactform input[type="file"]:hover {
+    background-color: #F0F0F0;
+}
