@@ -22,7 +22,15 @@
                 <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
                 <input type="email" id="email" name="email" placeholder="Email" required>
                 <textarea id="mensaje" name="mensaje" rows="2" required></textarea> <!-- Corregir "texttarea" a "textarea" -->
-                <input type="email" id="correo_remitente" name="correo_remitente" placeholder="Enviar copia a mi correo:">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Archivo</span>
+                    </div>
+                    <div class="custom-file">
+                      <input type="file" name="my_file" id="my_file" class="custom-file-input" multiple>
+                      <label class="custom-file-label" for="inputGroupFile01">Hacer click aqui..!</label>
+                    </div>
+                  </div>
                 <div class="clear"></div>
                 <div class="col-md-8">
                     <!-- Agregar un ID al botón de enviar -->
