@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="js/material.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Página web</title>
@@ -26,27 +22,51 @@
                 <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
                 <input type="email" id="email" name="email" placeholder="Email" required>
                 <textarea id="mensaje" name="mensaje" rows="2" required></textarea> <!-- Corregir "texttarea" a "textarea" -->
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Archivo</span>
-                    </div>
-                    <div class="custom-file">
-                      <input type="file" name="my_file" id="my_file" class="custom-file-input" multiple>
-                      <label class="custom-file-label" for="inputGroupFile01">Hacer click aqui..!</label>
-                    </div>
-                  </div>
+                <input type="email" id="correo_remitente" name="correo_remitente" placeholder="Enviar copia a mi correo:">
                 <div class="clear"></div>
                 <div class="col-md-8">
                     <!-- Agregar un ID al botón de enviar -->
-                    <button type="submit" class="btn btn-primary">Enviar </button>
+                    <button id="btnEnviar" type="button" class="btn btn-primary">ENVIAR</button>
                 </div>
             </form>
-        </div>   
+        </div>
+        <script>
+        $(document).ready(function() {
+            // Función para mostrar SweetAlert antes de enviar el formulario
+            $("#btnEnviar").click(function() {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: '¿Quieres enviar el formulario?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, enviar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si el usuario confirma, enviar el formulario usando AJAX
+                        $.ajax({
+                            type: "POST",
+                            url: "enviar.php",
+                            data: $("#miFormulario").serialize(), // Serializar el formulario para enviar los datos
+                            success: function(response) {
+                                // Aquí puedes manejar la respuesta del servidor si es necesario
+                                console.log(response);
+                                // Recargar la página después de enviar el formulario
+                                window.location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                                // Mostrar mensaje de error si hay un problema con AJAX
+                                alert("Hubo un error al procesar la solicitud.");
+                            }
+                        });
+                    }
+                });
+            });
+        });
+            </script>
+        
     </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="js/material.min.js"></script>
     
 </body>
 </html>

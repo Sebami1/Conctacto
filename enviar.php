@@ -1,65 +1,44 @@
-<?php   
-    //Capturo los datos enviados por POST desde el formulario
-    ini_set("SMTP", "wolfsotre.shop");
-    ini_set("smtp_port", "5847"); 
+<?php
 
-    $email               = $_REQUEST["email"]; 
-    $nombreCompleto      = $_REQUEST["nombre"];
-    $mensaje             = $_REQUEST["mensaje"];
+ini_set("SMTP", "wolfsotre.shop");
+ini_set("smtp_port", "5847"); 
 
-    $desdEmail           = 'sebami@wolfstore.shop';
-    
-   
-    //Construyo el cuerpo del mensaje    
-    $message            = "Nombre: " . $nombreCompleto . "\n";
-    $message            = $message . "Email: " . $email . "\n";
-    $message            = $message . "Mensaje: " . $mensaje . "\n";
+// Datos del formulario
+$nombre = $_POST['nombre'];
+$email = $_POST['email'];
+$mensaje = $_POST['mensaje'];
 
-   
-    //Obtener datos del archivo subido 
-    $file_tmp_name      = $_FILES['my_file']['tmp_name'];
-    $file_name          = $_FILES['my_file']['name'];
-    $file_size          = $_FILES['my_file']['size'];
-    $file_type          = $_FILES['my_file']['type'];
+// Correo corporativo al que se enviará el mensaje
+$correoCorporativo = 'sebami@wolfstore.shop';
 
-       
-    //Leer el archivo y codificar el contenido para armar el cuerpo del email
-    $handle              = fopen($file_tmp_name, "r");
-    $content             = fread($handle, $file_size);
-    fclose($handle);
-    $encoded_content     = chunk_split(base64_encode($content));
-   
-    $boundary            = md5("pera");
-  
-    //Encabezados
-    $headers = "MIME-Version: 1.0\r\n"; 
-    $headers .= "From: $email\r\n"; 
-    $headers .= "Reply-To: $desdEmail\r\n";
-    $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
-    $headers .= "Content-Type: multipart/mixed; boundary=$boundary\r\n\r\n";
+// Correo del remitente para enviar una copia
+$correoRemitente = $_POST['correo_remitente'];
 
-           
-    //Texto plano
-    $body               = "--$boundary\r\n";
-    $body               .= "Content-Type: text/plain; charset=ISO-8859-1\r\n";
-    $body               .= "Content-Transfer-Encoding: base64\r\n\r\n"; 
-    $body               .= chunk_split(base64_encode($message)); 
-           
-    //Adjunto
-    $body               .= "--$boundary\r\n";
-    $body               .="Content-Type: $file_type; name=".$file_name."\r\n";
-    $body               .="Content-Disposition: attachment; filename=".$file_name."\r\n";
-    $body               .="Content-Transfer-Encoding: base64\r\n";
-    $body               .="X-Attachment-Id: ".rand(1000,99999)."\r\n\r\n"; 
-    $body               .= $encoded_content; 
-       
-    $subject            = "Hola amigos WebDeveloper";
-    
-    //Enviando el mail
-    $sentMail = mail($email, $subject, $body, $headers);
-    if($sentMail){       
-        echo"<p style='color:green; text-align: center; margin-top: 100px;'>
-            Formulario enviado, revisar el Email.</center></p>";
-    }else{
-        echo "<h2>Se produjo un error y su pedido no pudo ser enviado</h2>";
-    }  
+// Asunto del correo
+$asunto = 'Nuevo mensaje desde formulario de contacto';
+
+// Construir el cuerpo del mensaje
+$cuerpoMensaje = "Nombre: $nombre\n";
+$cuerpoMensaje .= "Email: $email\n";
+$cuerpoMensaje .= "Mensaje:\n$mensaje";
+
+// Cabeceras del correo
+$headers .= "X-Mailer: PHP/" . phpversion();
+$headers = "From: $nombre <$email>\r\n";
+$headers .= "Reply-To: $email\r\n";
+
+// Envío del correo al correo corporativo
+if (mail($correoCorporativo, $asunto, $cuerpoMensaje, $headers)) {
+    header('Location: index.html');
+} else {
+    echo '<p>Hubo un error al enviar el mensaje al correo corporativo. Por favor, inténtelo de nuevo más tarde.</p>';
+}
+
+// Envío del correo al correo ingresado en el formulario (si se proporcionó)
+if (!empty($correoRemitente)) {
+    if (mail($correoRemitente, $asunto, $cuerpoMensaje, $headers)) {
+        header('Location: index.html');
+    } else {
+        echo '<p>Hubo un error al enviar una copia del mensaje a tu correo electrónico. Por favor, inténtelo de nuevo más tarde.</p>';
+    }
+}
